@@ -105,8 +105,11 @@ Your Dash application file must define an ``app`` variable that is a Dash instan
    import os
    from dash import Dash, html, dcc
 
-   app = Dash(__name__)
-
+   app = Dash(__name__,
+      routes_pathname_prefix=os.getenv("DASH_ROUTES_PATHNAME_PREFIX"),
+      requests_pathname_prefix=os.getenv("DASH_REQUESTS_PATHNAME_PREFIX")
+   )
+   
    app.layout = html.Div([
        html.H1("My nanoHUB Dash App"),
        dcc.Graph(id='my-graph')

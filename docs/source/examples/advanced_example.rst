@@ -35,7 +35,11 @@ This example creates an interactive data exploration dashboard with:
    import numpy as np
 
    # Create the Dash app
-   app = Dash(__name__, suppress_callback_exceptions=True)
+   app = Dash(__name__,
+      routes_pathname_prefix=os.getenv("DASH_ROUTES_PATHNAME_PREFIX"),
+      requests_pathname_prefix=os.getenv("DASH_REQUESTS_PATHNAME_PREFIX"),
+      suppress_callback_exceptions=True
+   )
 
    # Sample dataset
    np.random.seed(42)

@@ -30,7 +30,10 @@ pip install nanohub-dash
 import os
 from dash import Dash, html
 
-app = Dash(__name__)
+app = Dash(__name__,
+    routes_pathname_prefix=os.getenv("DASH_ROUTES_PATHNAME_PREFIX"),
+    requests_pathname_prefix=os.getenv("DASH_REQUESTS_PATHNAME_PREFIX")
+)
 app.layout = html.Div("Hello nanoHUB!")
 
 if __name__ == "__main__":
