@@ -82,3 +82,6 @@ venv.bak/
 # Temporary files
 *.tmp
 *.temp
+
+# Sphinx documentation
+docs/build/

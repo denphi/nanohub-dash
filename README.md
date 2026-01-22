@@ -1,6 +1,12 @@
 # nanohub-dash
 
-Jupyter magic commands for configuring Dash apps on nanoHUB.
+[![Documentation Status](https://readthedocs.org/projects/nanohub-dash/badge/?version=latest)](https://nanohub-dash.readthedocs.io/en/latest/?badge=latest)
+
+Tools for running Dash applications on nanoHUB.
+
+## Documentation
+
+Full documentation is available at [https://nanohub-dash.readthedocs.io](https://nanohub-dash.readthedocs.io)
 
 ## Installation
 
@@ -8,35 +14,18 @@ Jupyter magic commands for configuring Dash apps on nanoHUB.
 pip install nanohub-dash
 ```
 
-## Usage
+## Features
 
-In a Jupyter notebook:
+- **Jupyter Magic Command** (`%set_dash_env`): Configure environment variables for Dash apps directly in Jupyter notebooks
+- **Command-line Tool** (`start_dash`): Launch Dash applications with automatic proxy configuration and header injection
+
+## Quick Start
+
+### Jupyter Notebook
 
 ```python
-# Load the extension
 %load_ext nanohubdash
-
-# Set up the Dash environment (uses default port 8001 and host 0.0.0.0)
 %set_dash_env
-
-# Or specify custom port and host
-%set_dash_env --port 8050 --host 127.0.0.1
-```
-
-This magic command sets the following environment variables:
-- `DASH_REQUESTS_PATHNAME_PREFIX` - The proxy path prefix for Dash requests
-- `DASH_ROUTES_PATHNAME_PREFIX` - Set to `/`
-- `DASH_HOST` - The bind host for Dash
-- `DASH_PORT` - The port for Dash
-- `DASH_BASE_PROXY` - The proxy URL (https://proxy.<hub_host>)
-
-After running the magic, it will print the browser URL where you can access your Dash app.
-
-## Example
-
-```python
-%load_ext nanohubdash
-%set_dash_env --port 8001
 
 from dash import Dash, html
 
@@ -47,6 +36,22 @@ if __name__ == "__main__":
     app.run_server()
 ```
 
+### Command Line
+
+```bash
+start_dash --app myapp.py
+```
+
+## Environment Variables
+
+The magic command sets the following environment variables:
+
+- `DASH_REQUESTS_PATHNAME_PREFIX` - The proxy path prefix for Dash requests
+- `DASH_ROUTES_PATHNAME_PREFIX` - Set to `/`
+- `DASH_HOST` - The bind host for Dash
+- `DASH_PORT` - The port for Dash
+- `DASH_BASE_PROXY` - The proxy URL (https://proxy.<hub_host>)
+
 ## Requirements
 
 - Python >= 3.8
@@ -55,4 +60,4 @@ if __name__ == "__main__":
 
 ## License
 
-MIT
+MIT License - Copyright 2026 HUBzero Foundation, LLC.
