@@ -264,9 +264,10 @@ This example creates an interactive data exploration dashboard with:
 
    if __name__ == "__main__":
        app.run(
+           jupyter_server_url=os.environ.get("DASH_BASE_PROXY"),
            host=os.environ.get("DASH_HOST", "0.0.0.0"),
            port=os.environ.get("DASH_PORT", "8001"),
-           debug=False
+           debug=False,
        )
 
 Key Features Demonstrated
