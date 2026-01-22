@@ -27,13 +27,17 @@ pip install nanohub-dash
 %load_ext nanohubdash
 %set_dash_env
 
+import os
 from dash import Dash, html
 
 app = Dash(__name__)
 app.layout = html.Div("Hello nanoHUB!")
 
 if __name__ == "__main__":
-    app.run_server()
+    app.run(
+        host=os.environ.get("DASH_HOST", "0.0.0.0"),
+        port=os.environ.get("DASH_PORT", "8001"),
+    )
 ```
 
 ### Command Line

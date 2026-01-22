@@ -263,7 +263,11 @@ This example creates an interactive data exploration dashboard with:
 
 
    if __name__ == "__main__":
-       app.run_server(debug=False)
+       app.run(
+           host=os.environ.get("DASH_HOST", "0.0.0.0"),
+           port=os.environ.get("DASH_PORT", "8001"),
+           debug=False
+       )
 
 Key Features Demonstrated
 -------------------------

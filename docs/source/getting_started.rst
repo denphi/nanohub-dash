@@ -102,6 +102,7 @@ Your Dash application file must define an ``app`` variable that is a Dash instan
 
 .. code-block:: python
 
+   import os
    from dash import Dash, html, dcc
 
    app = Dash(__name__)
@@ -112,7 +113,10 @@ Your Dash application file must define an ``app`` variable that is a Dash instan
    ])
 
    if __name__ == "__main__":
-       app.run_server()
+       app.run(
+           host=os.environ.get("DASH_HOST", "0.0.0.0"),
+           port=os.environ.get("DASH_PORT", "8001"),
+       )
 
 Using Environment Variables in Your App
 ---------------------------------------

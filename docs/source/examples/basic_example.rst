@@ -19,6 +19,7 @@ Create a new Jupyter notebook on nanoHUB and add the following cells:
 
 .. code-block:: python
 
+   import os
    from dash import Dash, html, dcc
    import plotly.express as px
    import pandas as pd
@@ -50,7 +51,11 @@ Create a new Jupyter notebook on nanoHUB and add the following cells:
    ])
 
    if __name__ == "__main__":
-       app.run_server(debug=False)
+       app.run(
+           host=os.environ.get("DASH_HOST", "0.0.0.0"),
+           port=os.environ.get("DASH_PORT", "8001"),
+           debug=False
+       )
 
 Understanding the Code
 ----------------------
@@ -58,7 +63,7 @@ Understanding the Code
 1. **Loading the extension**: ``%load_ext nanohubdash`` registers the magic command
 2. **Setting the environment**: ``%set_dash_env`` configures all necessary environment variables
 3. **Creating the app**: Standard Dash application code
-4. **Running the server**: ``app.run_server()`` starts the development server
+4. **Running the server**: ``app.run()`` starts the development server
 
 The magic command automatically detects your nanoHUB session and configures:
 
@@ -75,6 +80,7 @@ You can also create a standalone Python file and use the ``start_dash`` command.
 
 .. code-block:: python
 
+   import os
    from dash import Dash, html, dcc
    import plotly.express as px
    import pandas as pd
@@ -102,7 +108,10 @@ You can also create a standalone Python file and use the ``start_dash`` command.
    ])
 
    if __name__ == "__main__":
-       app.run_server()
+       app.run(
+           host=os.environ.get("DASH_HOST", "0.0.0.0"),
+           port=os.environ.get("DASH_PORT", "8001"),
+       )
 
 Then run from the terminal:
 
