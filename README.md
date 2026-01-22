@@ -28,7 +28,7 @@ This magic command sets the following environment variables:
 - `DASH_ROUTES_PATHNAME_PREFIX` - Set to `/`
 - `DASH_HOST` - The bind host for Dash
 - `DASH_PORT` - The port for Dash
-- `DASH_PROXY` - The proxy URL (https://proxy.<hub_host>)
+- `DASH_BASE_PROXY` - The proxy URL (https://proxy.<hub_host>)
 
 After running the magic, it will print the browser URL where you can access your Dash app.
 

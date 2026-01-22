@@ -144,7 +144,7 @@ class SetDashEnvMagic(Magics):
             - DASH_ROUTES_PATHNAME_PREFIX: Set to '/'
             - DASH_HOST: The host address for the Dash server
             - DASH_PORT: The port number for the Dash server
-            - DASH_PROXY: Base proxy URL (https://proxy.<hub_host>)
+            - DASH_BASE_PROXY: Base proxy URL (https://proxy.<hub_host>)
 
         After execution, prints the browser URL where the Dash app
         will be accessible.
@@ -160,7 +160,7 @@ class SetDashEnvMagic(Magics):
         os.environ["DASH_ROUTES_PATHNAME_PREFIX"] = "/"
         os.environ["DASH_HOST"] = args.host
         os.environ["DASH_PORT"] = str(args.port)
-        os.environ["DASH_PROXY"] = proxy_url
+        os.environ["DASH_BASE_PROXY"] = proxy_url
 
         print("Dash environment variables loaded.")
 

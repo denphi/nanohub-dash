@@ -40,7 +40,7 @@ This package provides two main features:
        - DASH_ROUTES_PATHNAME_PREFIX
        - DASH_HOST
        - DASH_PORT
-       - DASH_PROXY
+       - DASH_BASE_PROXY
 
 2. Command-line Tool (start_dash):
    Launch Dash applications with automatic proxy configuration and header injection.
