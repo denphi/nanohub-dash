@@ -162,15 +162,7 @@ class SetDashEnvMagic(Magics):
         os.environ["DASH_PORT"] = str(args.port)
         os.environ["DASH_PROXY"] = proxy_url
 
-        print("Dash environment set:")
-        print(f"  DASH_REQUESTS_PATHNAME_PREFIX={os.environ['DASH_REQUESTS_PATHNAME_PREFIX']}")
-        print(f"  DASH_ROUTES_PATHNAME_PREFIX={os.environ['DASH_ROUTES_PATHNAME_PREFIX']}")
-        print(f"  DASH_HOST={os.environ['DASH_HOST']}")
-        print(f"  DASH_PORT={os.environ['DASH_PORT']}")
-        print(f"  DASH_PROXY={os.environ['DASH_PROXY']}")
-        print()
-        print("Open in browser:")
-        print(f"  {browser_url}")
+        print("Dash environment variables loaded.")
 
 
 def load_ipython_extension(ipython):
