@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nanohub-dash"
+dynamic = ["version"]
+description = "Jupyter magic commands for configuring Dash apps on nanoHUB"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.8"
+authors = [
+    {name = "nanoHUB"}
+]
+keywords = ["jupyter", "dash", "nanohub", "magic"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Framework :: IPython",
+    "Framework :: Jupyter",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "ipython>=7.0",
+]
+
+[project.scripts]
+start_dash = "nanohubdash.start_dash:main"
+
+[project.urls]
+Homepage = "https://github.com/nanohub/nanohub-dash"
+Repository = "https://github.com/nanohub/nanohub-dash"
+
+[tool.setuptools.packages.find]
+include = ["nanohubdash*"]
+
+[tool.setuptools.dynamic]
+version = {attr = "nanohubdash._version.__version__"}
