@@ -310,9 +310,30 @@ def write_runner(app_path: str, remote_url: str, home_url: str, proxy_url: str, 
 
     runner_code = f"""\
 import os, sys, importlib
-sys.path.insert(0, {app_dir!r})
+# Monkey patch Dash to prevent app.run() from blocking during import
+# This is necessary because some users call app.run() at module level
+try:
+    from dash import Dash
+    _orig_run = getattr(Dash, 'run', None)
+    _orig_run_server = getattr(Dash, 'run_server', None)
 
+    def _noop(*args, **kwargs):
+        print("start_dash: Suppressing blocking app.run() call during import", flush=True)
+
+    if _orig_run: Dash.run = _noop
+    if _orig_run_server: Dash.run_server = _noop
+except ImportError:
+    pass
+
+sys.path.insert(0, {app_dir!r})
 m = importlib.import_module({mod!r})
+
+# Restore Dash methods
+try:
+    if _orig_run: Dash.run = _orig_run
+    if _orig_run_server: Dash.run_server = _orig_run_server
+except:
+    pass
 
 # Accept either:
 #  - app = Dash(...)
@@ -321,15 +342,6 @@ app = getattr(m, "app", None)
 if app is None:
     raise RuntimeError("Your app file must define `app = dash.Dash(...)` for dev-run fallback.")
 
-# Override pathname prefixes with environment variables
-requests_prefix = os.getenv("DASH_REQUESTS_PATHNAME_PREFIX")
-routes_prefix = os.getenv("DASH_ROUTES_PATHNAME_PREFIX")
-if requests_prefix and hasattr(app, 'config'):
-    app.config.requests_pathname_prefix = requests_prefix
-    print(f"Overriding requests_pathname_prefix to: {{requests_prefix}}", flush=True)
-if routes_prefix and hasattr(app, 'config'):
-    app.config.routes_pathname_prefix = routes_prefix
-    print(f"Overriding routes_pathname_prefix to: {{routes_prefix}}", flush=True)
 
 host = os.getenv("HOST", "0.0.0.0")
 port = int(os.getenv("PORT", "8001"))
@@ -471,6 +483,7 @@ Examples:
     p_path, p_url, p_port = get_proxy_addr()
 
     # Configure Dash environment variables
+    os.environ["DASH_REQUESTS_PATHNAME_PREFIX"] = p_path
     os.environ["DASH_REQUESTS_PATHNAME_PREFIX"] = p_path
     os.environ["DASH_ROUTES_PATHNAME_PREFIX"] = "/"
     os.environ["HOST"] = "0.0.0.0"
