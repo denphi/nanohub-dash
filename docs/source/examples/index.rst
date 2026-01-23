@@ -9,3 +9,4 @@ Dash applications on the nanoHUB platform.
 
    basic_example
    advanced_example
+   dashboard_tutorial
