@@ -27,13 +27,21 @@ In a Jupyter notebook on nanoHUB:
    %load_ext nanohubdash
    %set_dash_env
 
+   import os
    from dash import Dash, html
 
-   app = Dash(__name__)
+   app = Dash(__name__,
+       routes_pathname_prefix=os.getenv("DASH_ROUTES_PATHNAME_PREFIX"),
+       requests_pathname_prefix=os.getenv("DASH_REQUESTS_PATHNAME_PREFIX")
+   )
    app.layout = html.Div("Hello nanoHUB!")
 
    if __name__ == "__main__":
-       app.run_server()
+       app.run(
+           jupyter_server_url=os.environ.get("DASH_BASE_PROXY"),
+           host=os.environ.get("DASH_HOST", "0.0.0.0"),
+           port=os.environ.get("DASH_PORT", "8001"),
+       )
 
 .. toctree::
    :maxdepth: 2

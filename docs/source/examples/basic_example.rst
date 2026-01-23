@@ -97,7 +97,10 @@ You can also create a standalone Python file and use the ``start_dash`` command.
    })
 
    # Create the Dash app
-   app = Dash(__name__)
+   app = Dash(__name__,
+       routes_pathname_prefix=os.getenv("DASH_ROUTES_PATHNAME_PREFIX"),
+       requests_pathname_prefix=os.getenv("DASH_REQUESTS_PATHNAME_PREFIX")
+   )
 
    # Create a bar chart
    fig = px.bar(df, x="Fruit", y="Amount", color="City", barmode="group")

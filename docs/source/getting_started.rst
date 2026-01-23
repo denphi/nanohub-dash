@@ -132,7 +132,10 @@ You can access the configured environment variables in your app:
    import os
    from dash import Dash, html
 
-   app = Dash(__name__)
+   app = Dash(__name__,
+       routes_pathname_prefix=os.getenv("DASH_ROUTES_PATHNAME_PREFIX"),
+       requests_pathname_prefix=os.getenv("DASH_REQUESTS_PATHNAME_PREFIX")
+   )
 
    # Access environment variables
    base_proxy = os.environ.get("DASH_BASE_PROXY", "")

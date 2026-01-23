@@ -6,7 +6,7 @@ Requirements
 
 - Python >= 3.8
 - IPython >= 7.0
-- Must be running on a nanoHUB environment with ``SESSION`` and ``SESSIONDIR`` environment variables set
+- Must be running on a Hubzero environment with ``SESSION`` and ``SESSIONDIR`` environment variables set
 
 Installing from PyPI
 --------------------

@@ -484,7 +484,7 @@ Examples:
 
     # Configure Dash environment variables
     os.environ["DASH_REQUESTS_PATHNAME_PREFIX"] = p_path
-    os.environ["DASH_REQUESTS_PATHNAME_PREFIX"] = p_path
+
     os.environ["DASH_ROUTES_PATHNAME_PREFIX"] = "/"
     os.environ["HOST"] = "0.0.0.0"
     os.environ["PORT"] = "8001"
