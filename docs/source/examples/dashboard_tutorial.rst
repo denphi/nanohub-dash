@@ -43,14 +43,6 @@ This approach transforms a data dashboard into an intuitive, visually pleasing e
 2. Setup & Prerequisites
 ------------------------
 
-**Required Libraries**
-
-Ensure you have Python 3.7+ installed, then install the required packages:
-
-.. code-block:: bash
-
-   pip install dash dash-bootstrap-components pandas plotly scikit-learn numpy
-
 **Key Libraries Overview**
 
 - **dash**: The web framework for building interactive dashboards
