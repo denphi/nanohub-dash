@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nInitial release of nanohub-dash\n\nA Python package for running Dash applications on nanoHUB with:\n\n- Jupyter magic command \\(%set_dash_env\\) to configure Dash environment\n- CLI tool \\(start_dash\\) to launch Dash apps with proxy and header injection\n- Automatic weber proxy configuration for nanoHUB platform\n- Header bar injection with logo, support ticket link, and session termination\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git commit:*)",
+      "Bash(git push)",
+      "Bash(pip show:*)",
+      "Bash(python -m build:*)",
+      "Bash(python3:*)"
+    ]
+  }
+}

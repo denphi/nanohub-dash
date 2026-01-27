@@ -36,21 +36,25 @@ for running on the nanoHUB platform. It automatically:
 - Handles graceful shutdown on SIGINT, SIGTERM, and SIGHUP signals
 
 Usage:
-    start_dash --app myapp.py [--debug True] [--logo URL]
+    start_dash --app myapp.py [--debug True] [--logo URL] [--python-env ENV_NAME]
 
 Arguments:
-    --app     Required. Path to the Dash application Python file.
-              The file must define `app = dash.Dash(...)`.
-    --debug   Optional. Enable debug mode (True/False). Default: False.
-    --logo    Optional. URL for the logo displayed in the header bar.
+    --app         Required. Path to the Dash application Python file.
+                  The file must define `app = dash.Dash(...)`.
+    --debug       Optional. Enable debug mode (True/False). Default: False.
+    --logo        Optional. URL for the logo displayed in the header bar.
+    --python-env  Optional. Conda environment name to use (e.g., AIIDA, ALIGNN, AutoEIS).
+                  Run 'conda env list' to see available environments.
 
 Example:
     start_dash --app my_dashboard.py --debug True
+    start_dash --app app.py --python-env AIIDA
+    start_dash --app app.py --python-env ALIGNN
 
 Requirements:
     - Must be run on a nanoHUB environment with SESSION and SESSIONDIR set
     - The wrwroxy tool must be available (use -e wrwroxy-0.2)
-    - python3 must be on PATH
+    - python3 must be on PATH (or --python-env must specify a valid Python executable)
 """
 
 import argparse
@@ -67,6 +71,71 @@ from subprocess import Popen
 # Global process handles for cleanup on shutdown
 dashProcess = None
 wrwProcess = None
+
+
+def resolve_python_env(env_name: str) -> str:
+    """
+    Resolve a conda environment name to the Python executable path.
+
+    Args:
+        env_name: Name of the conda environment (e.g., 'AIIDA', 'ALIGNN').
+
+    Returns:
+        str: Absolute path to the Python executable in the conda environment.
+
+    Raises:
+        RuntimeError: If the environment is not found or conda is not available.
+    """
+    import json
+    import subprocess
+    
+    try:
+        # Get conda environment info in JSON format
+        result = subprocess.run(
+            ["conda", "info", "--json"],
+            capture_output=True,
+            text=True,
+            check=True
+        )
+        conda_info = json.loads(result.stdout)
+        envs = conda_info.get("envs", [])
+    except (subprocess.CalledProcessError, json.JSONDecodeError, FileNotFoundError):
+        raise RuntimeError(
+            "Could not retrieve conda environment list. "
+            "Make sure conda is installed and available on PATH."
+        )
+
+    # Look for the environment by name
+    env_path = None
+    for env_dir in envs:
+        if env_dir.endswith(f"/envs/{env_name}") or env_dir.endswith(f"\\envs\\{env_name}"):
+            env_path = env_dir
+            break
+
+    if not env_path:
+        # List available environments for the user
+        env_names = [os.path.basename(e) for e in envs if "/envs/" in e or "\\envs\\" in e]
+        raise RuntimeError(
+            f"Conda environment '{env_name}' not found.\n"
+            f"Available environments: {', '.join(sorted(env_names)) if env_names else 'none'}\n"
+            f"Run 'conda env list' to see all available environments."
+        )
+
+    # Find the Python executable in the environment
+    for python_name in ("python3", "python"):
+        # Try bin/python (Unix/Linux/macOS)
+        bin_python = os.path.join(env_path, "bin", python_name)
+        if os.path.isfile(bin_python) and os.access(bin_python, os.X_OK):
+            return bin_python
+
+        # Try Scripts/python.exe (Windows)
+        scripts_python = os.path.join(env_path, "Scripts", python_name + ".exe")
+        if os.path.isfile(scripts_python) and os.access(scripts_python, os.X_OK):
+            return scripts_python
+
+    raise RuntimeError(
+        f"Python executable not found in conda environment '{env_name}' at {env_path}"
+    )
 
 
 def normalize_prefix(p: str) -> str:
@@ -471,6 +540,13 @@ Examples:
         default="https://nanohub.org/app/site/media/images/PressKit/nanoHUB_logo_color.jpg",
         help="URL for the logo displayed in the header bar"
     )
+    ap.add_argument(
+        "--python-env",
+        default=None,
+        help="Conda environment name to use (e.g., AIIDA, ALIGNN). "
+             "Run 'conda env list' to see available environments. "
+             "If not specified, uses current Python interpreter."
+    )
     args = ap.parse_args()
 
     debug = str2bool(args.debug)
@@ -478,6 +554,14 @@ Examples:
     app_path = os.path.abspath(args.app)
     if not os.path.exists(app_path):
         raise RuntimeError(f"{app_path} not found")
+
+    # Resolve Python environment
+    python_executable = sys.executable
+    if args.python_env:
+        python_executable = resolve_python_env(args.python_env)
+        print(f"Using Python environment: {python_executable}", flush=True)
+    else:
+        print(f"Using default Python: {python_executable}", flush=True)
 
     # Get nanoHUB proxy configuration
     p_path, p_url, p_port = get_proxy_addr()
@@ -515,7 +599,7 @@ Examples:
     # Launch Dash application
     print("Starting Dash (dev runner)", flush=True)
     runner = write_runner(app_path, remote_url, terminate_url, p_url, logo_url)
-    dashProcess = Popen([sys.executable, runner], env=env)
+    dashProcess = Popen([python_executable, runner], env=env)
 
     # Launch wrwroxy reverse proxy
     wrw_cmd = (

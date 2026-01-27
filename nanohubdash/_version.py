@@ -23,4 +23,4 @@
 #  Authors:
 #  Daniel Mejia (denphi), Purdue University (denphi@denphi.com)
 
-__version__ = "0.1.1"
+__version__ = "0.1.2"
